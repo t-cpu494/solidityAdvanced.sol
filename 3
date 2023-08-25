@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >= 0.5.0 < 0.9.0;
+
+contract SearchParty {
+    function inputs(int[] memory array, int find) public pure returns(bool) {
+        quickSort(array, 0, array.length - 1);
+        bool found = binarySearch(array, find);
+        return found;
+    }
+
+    function quickSort(int[] memory array, uint start, uint end) private pure {
+        if(start < end) {
+            uint Pindex = partition(array, start, end);
+            quickSort(array, start, Pindex - 1);
+            quickSort(array, Pindex + 1, end);
+        }
+    }
+
+    function partition(int[] memory array, uint start, uint end) private pure returns(uint) {
+        int Pivot = array[array.length - 1];
+        uint Pindex = start;
+        for(uint i = start; i < end; i++) {
+            if(array[i] <= Pivot) {
+                int temp = array[i];
+                array[i] = array[Pindex];
+                array[Pindex] = temp;
+                Pindex++;
+            }
+        }
+        int tempo = array[Pindex];
+        array[Pindex] = Pivot;
+        Pivot = tempo;
+        return Pindex;
+    }
+
+    function binarySearch(int[] memory array, int find) private pure returns(bool) {
+        uint beg = 0;
+        uint end = array.length - 1;
+        uint mid;
+        while(beg <= end) {
+            mid = (beg + end)/2;
+            if(array[mid] == find) {
+                return true;
+            }
+            else if(find > array[mid]) {
+                beg = mid + 1;
+                continue;
+            }
+            else if(find < array[mid]) {
+                end = mid - 1;
+                continue;
+            }
+        }
+        return false;
+    }
+}
