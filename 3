@@ -1,41 +1,55 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: GPL - 3.0
 pragma solidity >= 0.5.0 < 0.9.0;
 
-contract sortAndSearch {
-    int[] storageArray;
-
-    function Array(int[] memory userInputArray) public {
-        storageArray = bubbleSort(userInputArray);
+contract noExists {
+    int[] public contractStorage;
+    function UserInputArray(int[] memory userInputArray) public {
+        contractStorage = quickSort(userInputArray, 0, userInputArray.length - 1);  
     }
 
-    function searchElement(int find) public view returns (bool) {
-        return binarySearch(storageArray, find);
+    function Find(int find) public view returns(bool) {
+        return binarySearch(find);
     }
 
-    function bubbleSort(int[] memory userInputArray) private pure returns (int[] memory) {
-        uint n = userInputArray.length;
-        for (uint i = 0; i < n - 1; i++) {
-            for (uint j = 0; j < n - i - 1; j++) {
-                if (userInputArray[j] > userInputArray[j + 1]) {
-                    (userInputArray[j], userInputArray[j + 1]) = (userInputArray[j + 1], userInputArray[j]); // Swap elements
-                }
+    function quickSort(int[] memory userInputArray, uint start, uint end) private pure returns(int[] memory) {
+        if(start < end) {
+            uint Pindex = partition(userInputArray, start, end);
+            quickSort(userInputArray, Pindex + 1, end);
+            if(Pindex != 0) {
+            quickSort(userInputArray, start, Pindex - 1);
             }
         }
         return userInputArray;
     }
 
-    function binarySearch(int[] memory sortedArray, int find) private pure returns (bool) {
-        uint left = 0;
-        uint right = sortedArray.length - 1;
+    function partition(int[] memory userInputArray, uint start, uint end) private pure returns(uint) {
+        int Pivot = userInputArray[end];
+        uint Pindex = start;
+        for(uint i = start; i < end; i++) {
+            if(userInputArray[i] < Pivot) {
+                (userInputArray[i], userInputArray[Pindex]) = (userInputArray[Pindex], userInputArray[i]);
+                Pindex++;
+            }
+        }
+        (userInputArray[Pindex], userInputArray[end]) = (userInputArray[end], userInputArray[Pindex]);
+        return Pindex;
+    }
 
-        while (left <= right) {
-            uint mid = (left + right) / 2;
-            if (sortedArray[mid] == find) {
+    function binarySearch(int find) private view returns(bool) {
+        uint start = 0;
+        uint end = contractStorage.length - 1;
+        while(start <= end) {
+            uint mid = (start + end)/2;
+            if(contractStorage[mid] == find) {
                 return true;
-            } else if (sortedArray[mid] < find) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+            }
+            else if(find < contractStorage[mid]) {
+                if(mid != 0) {
+                end = mid - 1;
+                } else { return false; }
+            }
+            else {
+                start = mid + 1;
             }
         }
         return false;
