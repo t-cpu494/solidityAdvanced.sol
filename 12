@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: GPL - 3.0
+pragma solidity >= 0.5.0 < 0.9.0;
+
+struct Student {
+    string Name;
+    uint Roll_Number;
+    uint Age;
+}
+
+contract studentMapping {
+
+mapping(address => Student) Map;
+
+function creatingStudentInstance(address addresss, string calldata name, uint rollNo, uint age) public {
+    // Student memory a;
+    // a = Student(name, rollNo, age);
+    // Map[addresss] = a;
+
+    Map[addresss] = Student(name, rollNo, age);
+}
+
+function returnStudentDetails(address addresss) public view returns(Student memory) {
+    return Map[addresss];
+}
+}
