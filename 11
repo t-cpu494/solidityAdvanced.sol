@@ -2,7 +2,16 @@
 pragma solidity >= 0.5.0 < 0.9.0;
 
 contract Mapping {
-mapping(address => int[3]) addresssMarks;
 
+mapping(address => uint[3]) addresssMarks;
+
+function insertMarks(address addresss, uint s, uint marks) public {
+    require(s >= 0 && s <= 2, "No subject of this index number exists!");
+        addresssMarks[addresss][s] = marks;
 }
 
+function returnMarks(address addresss, uint s) public view returns(uint) {
+    require(s >= 0 && s <= 2, "No subject of this index number exists!");
+    return addresssMarks[addresss][s];
+}
+}
